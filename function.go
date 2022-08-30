@@ -18,6 +18,9 @@ const (
 
 func DoljaraRooms(response http.ResponseWriter, req *http.Request) {
 
+	response.Header().Set("access-control-allow-origin", "*")
+	response.Header().Set("content-type", "application/json; charset=utf-8")
+
 	rid := req.URL.Query().Get("rid")
 	if rid == "" {
 		response.WriteHeader(http.StatusBadRequest)
@@ -90,6 +93,11 @@ func DoljaraRooms(response http.ResponseWriter, req *http.Request) {
 		}
 
 		response.WriteHeader(http.StatusOK)
+
+	case http.MethodOptions:
+		response.Header().Set("access-control-allow-headers", "content-type")
+		response.Header().Set("access-control-allow-methods", "GET, PUT, OPTIONS")
+		response.WriteHeader(http.StatusNoContent)
 
 	default:
 		response.WriteHeader(http.StatusMethodNotAllowed)
