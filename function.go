@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/go-redis/redis/v8"
@@ -27,7 +28,8 @@ func DoljaraRooms(response http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	opt, _ := redis.ParseURL("rediss://:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx:xxxxx")
+	opt, _ := redis.ParseURL(fmt.Sprintf("rediss://default:%s@%s:%s",
+		os.Getenv("REDIS_PASSWORD"), os.Getenv("REDIS_ENDPOINT"), os.Getenv("REDIS_PORT")))
 	opt.MaxRetries = -1
 	client := redis.NewClient(opt)
 	ctx := context.Background()
